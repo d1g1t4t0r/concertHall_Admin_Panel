@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title>Concerts</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
@@ -40,7 +40,7 @@
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
                             data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        Find users
+                        Find concert
                     </button>
                 </h2>
             </div>
@@ -48,9 +48,9 @@
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                 <div class="card-body">
 
-                    <form method="GET" action="{{ url_for('users_find') }}">
+                    <form method="GET" action="{{ url_for('concerts_find') }}">
                         <div class="form-group mt-3">
-                            <label>Username:</label>
+                            <label>Artist Name:</label>
                             <input type="text" class="form-control" name="name">
                         </div>
                         <button type="submit" class="btn btn-outline-primary">Find</button>
@@ -62,70 +62,45 @@
     </div>
 
 
+
     <table class="table mt-3">
         <thead>
         <tr>
-            <th scope="col">Username</th>
-            <th scope="col">Current Role</th>
-            {% if session['role'] > 1 %}
-                <th scope="col">Ban</th>
-            {% endif %}
-            {% if session['role'] > 2 %}
-                <th scope="col">Set Role</th>
-                <th scope="col">Selected Role</th>
-            {% endif %}
+            <th scope="col">Concert Name</th>
+            <th scope="col">Concert Info</th>
+            <th scope="col">Concert Date</th>
+            <th scope="col">Get Reviews</th>
         </tr>
         </thead>
         <tbody>
 
-        {% for user in users %}
+        {% for concert in concerts %}
             <tr>
+                    <td>
+                        {{ concert.concert_name }}
+                    </td>
+                     <td>
+                        {{ concert.concert_info }}
+                    </td>
+                     <td>
+                        {{ concert.concert_date }}
+                    </td>
                 <td>
-                    {{ user.username }}
-                </td>
-                <td>
-                    {% if user.user_role == 0 %}
-                    <p> Normal User </p>
-                    {% endif %}
-                    {% if user.user_role == 1 %}
-                    <p> Banned </p>
-                    {% endif %}
-                    {% if user.user_role == 2 %}
-                    <p> Moderator </p>
-                    {% endif %}
-                    {% if user.user_role == 3 %}
-                    <p> Administrator </p>
-                    {% endif %}
-                </td>
-            {% if session['role'] > 1 %}
-                <form method="post" action="{{ url_for('ban_user') }}">
-                    <input type="hidden" name="user_ID" value="{{ user.user_id }}">
-                    <td><input type="submit" class="btn btn-outline-danger" value="BAN"></td>
-                </form>
-            {% endif %}
-            {% if session['role'] > 2 %}
-                <form method="post" action="{{ url_for('role_user') }}">
-                    <input type="hidden" name="user_ID" value="{{ user.user_id }}">
-                    <td><input type="submit" class="btn btn-outline-success" value="SET ROLE"></td>
-                    <td><select id="category" name="category" class="form-control">
-                        <option>Normal User</option>
-                        <option>Moderator</option>
-                        <option>Administrator</option>
-                    </select>
-                </td>
-                </form>
-            {% endif %}
+                <p><a class="btn btn btn-primary text-light"
+                                      href="{{ url_for('get_reviews', id=concert.concert_id) }}">GET
+                                    </a></p>
+            <td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
 
 {% else %}
                         <a class="btn btn-outline-primary" href="{{ url_for('login_page') }}">Login</a>
 
             {% endif %}
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

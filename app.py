@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from config import app
 
-from routes import users, login
+from routes import users, login, concerts, concert_reviews
 if True:
     from models import *
 
