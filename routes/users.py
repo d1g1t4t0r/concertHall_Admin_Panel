@@ -20,7 +20,7 @@ def users_find():
 
 @app.route('/users', methods=['GET'])
 def users():
-    all_users = User.query.order_by(desc(User.username)).all()
+    all_users = User.query.order_by(asc(User.username)).all()
     return render_template("users.html", users=all_users)
 
 
@@ -31,32 +31,6 @@ def ban_user():
         User.query.filter(User.user_id == curr_id).update(
             {
                 'user_role': 1
-            })
-        db.session.commit()
-    except Exception:
-        traceback.print_exc()
-    return redirect(url_for('users'))
-
-@app.route('/users/mod', methods=['POST'])
-def mod_user():
-    try:
-        curr_id = request.form.get('user_ID')
-        User.query.filter(User.user_id == curr_id).update(
-            {
-                'user_role': 2
-            })
-        db.session.commit()
-    except Exception:
-        traceback.print_exc()
-    return redirect(url_for('users'))
-
-@app.route('/users/admin', methods=['POST'])
-def adm_user():
-    try:
-        curr_id = request.form.get('user_ID')
-        User.query.filter(User.user_id == curr_id).update(
-            {
-                'user_role': 3
             })
         db.session.commit()
     except Exception:
@@ -82,6 +56,11 @@ def role_user():
             User.query.filter(User.user_id == curr_id).update(
                 {
                     'user_role': 3
+                })
+        elif (role == "Super Administrator"):
+            User.query.filter(User.user_id == curr_id).update(
+                {
+                    'user_role': 4
                 })
         db.session.commit()
     except Exception:

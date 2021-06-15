@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Concerts</title>
+    <title>Concert Reviews</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
@@ -16,8 +16,8 @@
     </button>
     {% if session['logged_in'] %}
         <form method="GET" action="{{ url_for('logout') }}">
+            <button type="submit" class="btn btn-outline-primary" style="position: absolute; right: 10px;top: 10px">Log out</button>
             <button type="button" class="btn btn-secondary btn" style="position: absolute; right: 100px; top: 10px" disabled>Username: {{ session['username'] }}</button>
-                        <button type="submit" class="btn btn-outline-primary" style="position: absolute; right: 10px;top: 10px">Log out</button>
                     </form>
 
 
@@ -37,63 +37,51 @@
 </nav>
 
 <div class="container">
-<div class="accordion" id="accordionExample">
-        <div class="card mt-3">
-            <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
-                            data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        Find artist
-                    </button>
-                </h2>
-            </div>
-
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body">
-
-                    <form method="GET" action="{{ url_for('artists_find') }}">
-                        <div class="form-group mt-3">
-                            <label>Artist Name:</label>
-                            <input type="text" class="form-control" name="name">
-                        </div>
-                        <button type="submit" class="btn btn-outline-primary">Find</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <p></p>
+    <h2><p>Artist Name: {{ artist.artist_name }}</p></h2>
 
     <table class="table mt-3">
         <thead>
         <tr>
-            <th scope="col">Artist Name</th>
-            <th scope="col">Get Reviews</th>
+            <th scope="col">Review text</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Author</th>
+            <th scope="col">Delete</th>
         </tr>
         </thead>
         <tbody>
 
-        {% for artist in artists %}
+        {% for review in artist_reviews %}
             <tr>
+                <form method="post" action="{{ url_for('edit_artist_review', id=artist.artist_id) }}">
                     <td>
-                        {{ artist.artist_name }}
+                        <textarea class="form-control" type="text" value="{{ review.artist_review_info }}" name="artist_review_info" style="height:100px">{{ review.artist_review_info }}</textarea>
                     </td>
-                <td>
-                <p><a class="btn btn btn-primary text-light"
-                                      href="{{ url_for('get_artist_reviews', id=artist.artist_id) }}">GET
-                                    </a></p>
-            <td>
+
+                    <td>
+                        <input type="hidden" value="{{ review.artist_review_id }}" name="artist_review" >
+                        <button type="submit" class="btn btn-outline-warning">EDIT</button>
+                    </td>
+                </form>
+                    {%  for a in users %}
+                    {% if a.user_id == review.user_id %}
+                        <td>{{ a.username }}</td>
+                    {% endif %}
+
+                    {% endfor %}
+                <form method="post" action="{{ url_for('artist_review_delete', id=artist.artist_id) }}">
+                    <input type="hidden" name="artist_review" value="{{ review.artist_review_id }}">
+                    <td><input type="submit" class="btn btn-outline-danger" value="DELETE"></td>
+                </form>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
 {% else %}
                         <a class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px" href="{{ url_for('login_page') }}">Login</a>
 
             {% endif %}
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

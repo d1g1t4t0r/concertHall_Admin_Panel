@@ -16,8 +16,8 @@
     </button>
     {% if session['logged_in'] %}
         <form method="GET" action="{{ url_for('logout') }}">
-            <button type="button" class="btn btn-secondary btn" disabled>Username: {{ session['username'] }}</button>
-                        <button type="submit" class="btn btn-outline-primary">Log out</button>
+            <button type="button" class="btn btn-secondary btn" style="position: absolute; right: 100px; top: 10px" disabled>Username: {{ session['username'] }}</button>
+                        <button type="submit" class="btn btn-outline-primary" style="position: absolute; right: 10px;top: 10px">Log out</button>
                     </form>
 
 
@@ -28,6 +28,9 @@
                     </li>
     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('concerts') }}">Concerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('artists') }}">Artists</a>
                     </li>
                 </ul>
     </div>
@@ -75,7 +78,7 @@
         </tbody>
     </table>
 {% else %}
-                        <a class="btn btn-outline-primary" href="{{ url_for('login_page') }}">Login</a>
+                        <a class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px" href="{{ url_for('login_page') }}">Login</a>
 
             {% endif %}
 

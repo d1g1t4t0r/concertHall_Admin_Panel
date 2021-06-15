@@ -4,6 +4,12 @@ from flask import render_template, request, redirect, url_for, flash
 from sqlalchemy import asc
 from config import app
 from models import db, Concert, ConcertReview, User
+import datetime
+
+@app.template_filter('dt')
+def _jinja2_filter_datetime(date):
+    ret = date.strftime('%d %B %Y %H:%M')
+    return ret
 
 @app.route('/сoncerts', methods=['GET'])
 def concerts_find():
@@ -16,7 +22,6 @@ def concerts_find():
 
     all_rows = Concert.query \
         .filter(Concert.concert_name.ilike(name_search)).order_by(asc(Concert.concert_name))
-    print("Это у нас есть: ")
     return render_template("concerts.html", concerts=all_rows.all())
 
 @app.route('/concerts', methods=['GET'])
